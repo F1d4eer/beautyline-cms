@@ -1,0 +1,53 @@
+name: Build & Deploy to VPS
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Docker image
+      run: |
+        docker build -t beautyline-cms:${{ github.sha }} .
+        docker tag beautyline-cms:${{ github.sha }} beautyline-cms:latest
+
+    - name: Save image
+      run: docker save beautyline-cms:latest -o image.tar
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: docker-image
+        path: image.tar
+
+    - name: Trigger VPS deployment
+      if: always()
+      run: |
+        curl -X POST ${{ secrets.VPS_WEBHOOK_URL }} \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer ${{ secrets.VPS_WEBHOOK_SECRET }}" \
+          -d "{\"commit\": \"${{ github.sha }}\", \"branch\": \"${{ github.ref }}\"}" \
+          || echo "Webhook URL not configured yet"
+
+  notify:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+    - name: Telegram notification
+      if: vars.TELEGRAM_BOT_TOKEN != ''
+      run: |
+        curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
+          -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+          -d "text=🚀 Beautyline deployment: ${{ needs.build-and-push.result }}" \
+          || echo "Telegram notification skipped - credentials not configured"
