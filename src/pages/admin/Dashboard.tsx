@@ -23,15 +23,15 @@ const StatCard = ({
   accent?: boolean;
 }) => (
   <div
-    className="rounded-[1.5rem] bg-card p-6"
+    className="rounded-[1.5rem] bg-card p-4 sm:p-6"
     style={{ boxShadow: "var(--shadow-card)" }}
   >
-    <div className={`mb-4 inline-flex rounded-xl p-2.5 ${accent ? "bg-primary/10" : "bg-surface-low"}`}>
-      <Icon size={20} className={accent ? "text-primary" : "text-muted-foreground"} />
+    <div className={`mb-3 inline-flex rounded-xl p-2 ${accent ? "bg-primary/10" : "bg-surface-low"}`}>
+      <Icon size={18} className={accent ? "text-primary" : "text-muted-foreground"} />
     </div>
-    <p className="text-3xl font-bold text-foreground">{value}</p>
-    <p className="mt-1 text-sm font-medium text-foreground">{label}</p>
-    {sub && <p className="mt-0.5 text-xs text-muted-foreground">{sub}</p>}
+    <p className="text-2xl font-bold text-foreground sm:text-3xl">{value}</p>
+    <p className="mt-1 text-xs font-medium text-foreground sm:text-sm">{label}</p>
+    {sub && <p className="mt-0.5 text-[11px] text-muted-foreground sm:text-xs">{sub}</p>}
   </div>
 );
 
@@ -63,13 +63,13 @@ const Dashboard = () => {
       <h1 className="font-display mb-6 text-2xl font-semibold text-foreground">Дашборд</h1>
 
       {loading ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-36 animate-pulse rounded-[1.5rem] bg-card" />
+            <div key={i} className="h-28 animate-pulse rounded-[1.5rem] bg-card" />
           ))}
         </div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           <StatCard icon={Clock}         label="Новых заявок"    value={stats!.bookingsNew}    accent />
           <StatCard icon={CalendarCheck} label="Всего заявок"    value={stats!.bookingsTotal}  sub="за всё время" />
           <StatCard icon={Star}          label="Ждут публикации" value={stats!.reviewsPending} accent={stats!.reviewsPending > 0} />
@@ -91,7 +91,7 @@ const Dashboard = () => {
               href={l.href}
               target={l.blank ? "_blank" : undefined}
               rel={l.blank ? "noopener noreferrer" : undefined}
-              className="rounded-full bg-surface-low px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-primary/10 hover:text-primary"
+              className="rounded-full bg-surface-low px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-primary/10 hover:text-primary min-h-[40px] inline-flex items-center"
             >
               {l.label}
             </a>

@@ -188,32 +188,33 @@ const BookingsAdmin = () => {
   return (
     <div>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <h1 className="font-display text-2xl font-semibold text-foreground">Заявки на запись</h1>
+        <h1 className="font-display text-2xl font-semibold text-foreground">Заявки</h1>
         <div className="flex gap-2">
           <button
             onClick={load}
-            className="flex items-center gap-2 rounded-full bg-surface-container px-3 py-2 text-sm text-muted-foreground hover:text-foreground"
+            className="flex items-center gap-2 rounded-full bg-surface-container px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground min-h-[40px]"
             title="Обновить"
           >
             <RefreshCw size={14} />
           </button>
           <button
             onClick={openBlock}
-            className="flex items-center gap-2 rounded-full bg-surface-container px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
+            className="flex items-center gap-2 rounded-full bg-surface-container px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground min-h-[40px]"
           >
             <Ban size={14} />
-            Заблокировать слот
+            <span className="hidden sm:inline">Заблокировать слот</span>
+            <span className="sm:hidden">Блок</span>
           </button>
         </div>
       </div>
 
       {/* Filter tabs */}
-      <div className="mb-4 flex flex-wrap gap-2">
+      <div className="-mx-4 mb-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
         {filters.map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+            className={`shrink-0 rounded-full px-4 py-2 text-sm font-medium transition-colors min-h-[40px] ${
               filter === f ? "bg-primary text-primary-foreground" : "bg-surface-container text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -242,34 +243,34 @@ const BookingsAdmin = () => {
               className="rounded-[1.25rem] bg-card p-5"
               style={{ boxShadow: "var(--shadow-card)" }}
             >
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div>
-                  <div className="flex items-center gap-3">
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
                     <p className="font-medium text-foreground">{row.name}</p>
                     <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_COLORS[row.status]}`}>
                       {STATUS_LABELS[row.status]}
                     </span>
                   </div>
                   {row.phone !== "—" && (
-                    <a href={`tel:${row.phone}`} className="mt-0.5 text-sm text-primary hover:underline">
+                    <a href={`tel:${row.phone}`} className="mt-0.5 block text-sm text-primary hover:underline">
                       {row.phone}
                     </a>
                   )}
-                </div>
-                <div className="flex items-center gap-1">
-                  <p className="mr-2 text-xs text-muted-foreground">
+                  <p className="mt-0.5 text-[11px] text-muted-foreground">
                     {new Date(row.created_at).toLocaleString("ru-RU", {
                       day: "2-digit", month: "2-digit", year: "numeric",
                       hour: "2-digit", minute: "2-digit",
                     })}
                   </p>
+                </div>
+                <div className="flex shrink-0 items-center gap-0.5">
                   <button onClick={() => openEdit(row)}
-                    className="rounded-lg p-2 text-muted-foreground hover:bg-surface-low hover:text-foreground"
+                    className="rounded-xl p-2.5 text-muted-foreground hover:bg-surface-low hover:text-foreground min-h-[40px] min-w-[40px] flex items-center justify-center"
                     title="Редактировать">
                     <Pencil size={15} />
                   </button>
                   <button onClick={() => deleteRow(row.id)}
-                    className="rounded-lg p-2 text-muted-foreground hover:bg-surface-low hover:text-destructive"
+                    className="rounded-xl p-2.5 text-muted-foreground hover:bg-surface-low hover:text-destructive min-h-[40px] min-w-[40px] flex items-center justify-center"
                     title="Удалить">
                     <Trash2 size={15} />
                   </button>
